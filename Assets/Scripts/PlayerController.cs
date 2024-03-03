@@ -5,19 +5,30 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
-    private Rigidbody body;
+ 
+    private Rigidbody2D body;
     public float jumpForce = 10;
     public float jumpInterval = 0.5f;
     private float jumpCooldown = 0;
     void Start()
     {
-        body = GetComponent<Rigidbody>();
+        body = GetComponent<Rigidbody2D>();
     }
    
     // Update is called once per frame
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        var obstacle = other.gameObject;
+        if(obstacle) {
+            GameManager.Instance.gameOver = true;
+        }
+    }
     void Update()
     {
+        var gameManager = GameManager.Instance;
+        if(gameManager.isGameOver()) return;
+
+        
         jumpCooldown -= Time.deltaTime;
         bool canJump = jumpCooldown <= 0;
 
@@ -28,17 +39,10 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        bool isSensor = other.gameObject.CompareTag("Sensor");
 
-        if(isSensor) {
-            Debug.Log("PONTOSSSSSSSSSS");
-        }
-    }
     private void Jump() {
         jumpCooldown = jumpInterval;
-        body.velocity = Vector3.zero;
-        body.AddForce(new Vector3(0,jumpForce,0), ForceMode.Impulse);
+        body.velocity = Vector2.zero;
+        body.AddForce(new Vector2(0,jumpForce), ForceMode2D.Impulse);
     }
 }
