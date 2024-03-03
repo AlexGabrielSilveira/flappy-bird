@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     public float obstacleInterval = 1;
     public float obstacleSpeed = 10;
     public float xOffset = 0;
+
+    [HideInInspector]public int score;
+    [HideInInspector]public bool gameOver = false;
+
     public Vector2 yOffset = new Vector2(0,0);
     // Start is called before the first frame update
     void Awake()
@@ -20,5 +24,8 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
     }
-    
+
+    public bool isGameOver() {
+        return gameOver;
+    }
 }
